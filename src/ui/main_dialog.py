@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addLayout(self.horizontalLayout, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 679, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 679, 22))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -58,8 +58,6 @@ class Ui_MainWindow(object):
         self.actionSaveTo.setObjectName("actionSaveTo")
         self.actionSave_as = QtWidgets.QAction(MainWindow)
         self.actionSave_as.setObjectName("actionSave_as")
-        self.menuFile.addAction(self.actionExplore)
-        self.menuFile.addAction(self.actionSaveTo)
         self.menuFile.addSeparator()
         self.menubar.addAction(self.menuFile.menuAction())
 

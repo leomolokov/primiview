@@ -25,10 +25,10 @@ class Arc():
         return f'{self.atr}'
 
     def read(self, file):
-        self.arcs.append(file.start_point.x)
-        self.arcs.append(file.start_point.y)
-        self.arcs.append(file.end_point.x)
-        self.arcs.append(file.end_point.y)
+        self.coords.append(file.start_point.x)
+        self.coords.append(file.start_point.y)
+        self.coords.append(file.end_point.x)
+        self.coords.append(file.end_point.y)
         self.rad = file.dxf.radius
 
 # class Poly():
