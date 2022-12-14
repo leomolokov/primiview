@@ -31,6 +31,9 @@ class Ui_MainWindow(object):
         self.convertionButton = QtWidgets.QPushButton(self.centralwidget)
         self.convertionButton.setObjectName("convertionButton")
         self.verticalLayout.addWidget(self.convertionButton)
+        self.checkdrawingButton = QtWidgets.QPushButton(self.centralwidget)
+        self.checkdrawingButton.setObjectName("checkdrawingButton")
+        self.verticalLayout.addWidget(self.checkdrawingButton)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.MplWidget = QtWidgets.QWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -68,6 +71,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.convertionButton.setText(_translate("MainWindow", "Convert"))
+        self.checkdrawingButton.setText(_translate("MainWindow", "Check Drawing"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionExplore.setText(_translate("MainWindow", "Explore"))
         self.actionSaveTo.setText(_translate("MainWindow", "Save To"))

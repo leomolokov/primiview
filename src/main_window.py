@@ -12,11 +12,13 @@ import os
 class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
     def __init__(self):
         from filedata import DxfData
+        from scene import Sketch
 
         QMainWindow.__init__(self)
         self.setupUi(self)
 
         self.dxf_data = DxfData()
+        self.sketch = Sketch()
 
         # self.data = data
         # self.orig_data = data.copy()
@@ -65,5 +67,5 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
         self.canvas.flush_events()
 
     def draw_lines_call(self):
-        self.data.draw_segments(self.axes)
+        self.sketch.draw_lines(self.axes)
         self.redraw()
