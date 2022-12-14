@@ -3,33 +3,29 @@ import ezdxf
 import sys
 
 class Line():
-    def __init__(self, atr):
-        self.atr = atr
+    def __init__(self, file):
         self.coords = []
-
-    def __str__(self):
-        return f'{self.atr}'
-
-    def read(self, file):
+        self.atr = file
         self.coords.append(file.dxf.start.x)
         self.coords.append(file.dxf.start.y)
         self.coords.append(file.dxf.end.x)
         self.coords.append(file.dxf.end.y)
 
-class Arc():
-    def __init__(self, atr):
-        self.atr = atr
-        self.coords = []
-
     def __str__(self):
         return f'{self.atr}'
 
-    def read(self, file):
+class Arc():
+    def __init__(self, file):
+        self.atr = file
+        self.coords = []
         self.coords.append(file.start_point.x)
         self.coords.append(file.start_point.y)
         self.coords.append(file.end_point.x)
         self.coords.append(file.end_point.y)
         self.rad = file.dxf.radius
+
+    def __str__(self):
+        return f'{self.atr}'
 
 # class Poly():
 #     def __init__(self):
@@ -62,10 +58,10 @@ class DxfData():
 
         for prim in msp.query("*"):
             if prim.dxftype() == "LINE":
-                self.lines.append(Line(prim).read(prim))
+                self.lines.append(Line(prim))
 
             elif prim.dxftype() == "ARC":
-                self.arcs.append(Arc(prim).read(prim))
+                self.arcs.append(Arc(prim))
 
             # elif prim.dxftype() == "LWPOLYLINE":
             #     # file.write(str(prim))
