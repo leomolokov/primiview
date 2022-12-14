@@ -6,7 +6,7 @@ class Buttons():
         self.actionSaveTo.triggered.connect(self.get_save_dir)
 
         self.convertionButton.clicked.connect(self.convert_dxf)
-        self.checkdrawingButton.clicked.connect(self.draw_current)
+        self.checkdrawingButton.clicked.connect(self.draw_lines_call)
         # self.drawing_initialize.clicked.connect(self.draw_call)
         #
         # self.ConstSpinButton.stateChanged.connect(self.check_espin)
@@ -23,6 +23,3 @@ class Buttons():
         target_path = self.set_save_dir()
         self.dxf_data.get_primitives_data(source_path, target_path)
         self.dxf_data.print_data_into_txt()
-
-    def draw_current(self):
-        self.draw_lines_call()
