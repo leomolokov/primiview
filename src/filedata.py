@@ -75,24 +75,16 @@ class DxfData():
         gen_txt = open(self.txtPath, 'a')
 
         for line in self.lines:
-            gen_txt.write(line.atr + '\n')
-            for i in range(4):
-                gen_txt.write(line.coords[i] + '\t')
-                if i == -1:
-                    gen_txt.write(line.coords[i] + '\n')
-            # gen_txt.write(line[0] + '\n')
-            # gen_txt.write(line[1] + '\t')
-            # gen_txt.write(line[2] + '\t')
-            # gen_txt.write(line[3] + '\t')
-            # gen_txt.write(line[4] + '\n')
+            gen_txt.write(str(line.atr) + '\n')
+            for i in range(3):
+                gen_txt.write(str(line.coords[i]) + '\t')
+            gen_txt.write(str(line.coords[3]) + '\n')
 
         for arc in self.arcs:
-            gen_txt.write(arc[0] + '\n')
-            gen_txt.write(arc[1] + '\t')
-            gen_txt.write(arc[2] + '\t')
-            gen_txt.write(arc[3] + '\t')
-            gen_txt.write(arc[4] + '\t')
-            gen_txt.write(arc[5] + '\n')
+            gen_txt.write(str(arc.atr) + '\n')
+            for i in range(4):
+                gen_txt.write(str(arc.coords[i]) + '\t')
+            gen_txt.write(str(arc.rad) + '\n')
 
         # for poly in self.polylines:
             # gen_txt.write(str(x))
