@@ -36,8 +36,7 @@ class Sketch():
 
         for poly in self.geodata.polylines:
             from matplotlib.patches import Polygon
-            z = Polygon([n[:2] for n in poly.lwpoints], closed=True, fill=False, color='b', alpha=1)
-            axes.add_patch(z)
+            axes.add_patch(Polygon([n[:2] for n in poly.lwpoints], closed=True, fill=False, color='b', alpha=1))
 
         # for arc in self.geodata.arcs:
         #     arc_x = arc.center[0]
