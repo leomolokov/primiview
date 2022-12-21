@@ -95,9 +95,11 @@ class DxfData():
                 gen_txt.write(str(arc.coords[i]) + '\t')
             gen_txt.write(str(arc.rad) + '\n')
 
-        # for poly in self.polylines:
-            # gen_txt.write(str(x))
-
+        for poly in self.polylines:
+            # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
+            for lwpoint in poly.lwpoints:
+                gen_txt.write(str(lwpoint) + '\t')
+            gen_txt.write('\n')
         gen_txt.close()
 
     def define_dimes(self): #defines dimensions (profile) of a figure
