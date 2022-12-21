@@ -34,6 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
         self.canvas = canvas
 
         self.initButtons(self.dxf_data)
+        self.sketch.initSketch(self.dxf_data)
 
 
     def explore_source_path(self):
