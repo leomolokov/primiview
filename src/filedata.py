@@ -17,12 +17,9 @@ class Line():
 class Arc():
     def __init__(self, file):
         self.atr = file
-        self.coords = []
-        self.coords.append(file.start_point.x)
-        self.coords.append(file.start_point.y)
-        self.coords.append(file.end_point.x)
-        self.coords.append(file.end_point.y)
         self.rad = file.dxf.radius
+        self.start_point = file.start_point
+        self.end_point = file.end_point
         self.start_angle = file.dxf.start_angle
         self.end_angle = file.dxf.end_angle
         self.center = [file.dxf.center[0], file.dxf.center[1]]
@@ -104,8 +101,8 @@ class DxfData():
 
         for arc in self.arcs:
             gen_txt.write(str(arc.atr) + '\n')
-            for i in range(4):
-                gen_txt.write(str(arc.coords[i]) + '\t')
+            for i in range(2):
+                gen_txt.write(str(arc.center[i]) + '\t')
             gen_txt.write(str(arc.rad) + '\n')
 
         for circle in self.circles:

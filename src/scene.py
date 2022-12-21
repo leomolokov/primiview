@@ -32,15 +32,21 @@ class Sketch():
         self.draw_grid(axes)
 
         for line in self.geodata.lines:
-            axes.add_line(Line2D([line.coords[0], line.coords[2]], [line.coords[1], line.coords[3]], color='r'))
+            axes.add_line(Line2D([line.coords[0], line.coords[2]],
+                                 [line.coords[1], line.coords[3]],
+                                 color='r'))
 
         for poly in self.geodata.polylines:
-            axes.add_patch(Polygon([n[:2] for n in poly.lwpoints], closed=True, fill=False, color='b', alpha=1))
+            axes.add_patch(Polygon([n[:2] for n in poly.lwpoints],
+                                   closed=True,
+                                   fill=False,
+                                   color='b',
+                                   alpha=1))
 
         for arc in self.geodata.arcs:
             axes.add_patch(Arc((arc.center[0], arc.center[1]),
-                               width=1,
-                               height=1,
+                               width=2*arc.rad,
+                               height=2*arc.rad,
                                theta1=arc.start_angle,
                                theta2=arc.end_angle,
                                color='b',
