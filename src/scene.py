@@ -39,8 +39,8 @@ class Sketch():
 
         for arc in self.geodata.arcs:
             axes.add_patch(Arc((arc.center[0], arc.center[1]),
-                               arc_width=1,
-                               arc_height=1,
+                               width=1,
+                               height=1,
                                theta1=arc.start_angle,
                                theta2=arc.end_angle,
                                color='b',
