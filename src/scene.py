@@ -2,6 +2,7 @@ class Sketch():
     def initSketch(self, geodata):
         self.geodata = geodata
 
+
     def draw_grid(self, axes):
         axes.cla()
         axes.set_xlabel('X')
@@ -41,7 +42,8 @@ class Sketch():
                                    closed=True,
                                    fill=False,
                                    color='b',
-                                   alpha=1))
+                                   alpha=1,
+                                   edgecolor='b'))
 
         for arc in self.geodata.arcs:
             axes.add_patch(Arc((arc.center[0], arc.center[1]),

@@ -40,9 +40,9 @@ class Poly():
     def __init__(self, file):
         self.atr = file
         self.lwpoints = file.lwpoints
-        # for lwpoint in file.lwpoints:
-            # self.lwpoints.append(lwpoint.)
 
+    def __str__(self):
+        return f'{self.atr}'
 
 class DxfData():
     def __init__(self):
@@ -126,6 +126,23 @@ class DxfData():
         for line in self.lines:
             xs.append(line.coords[0])
             ys.append(line.coords[1])
+
+        for arc in self.arcs:
+            xs.append(arc.start_point[0])
+            xs.append(arc.end_point[0])
+            ys.append(arc.start_point[1])
+            ys.append(arc.end_point[1])
+
+        for circle in self.circles:
+            xs.append(circle.center[0] + circle.rad)
+            xs.append(circle.center[0] - circle.rad)
+            ys.append(circle.center[1] + circle.rad)
+            ys.append(circle.center[1] - circle.rad)
+
+        for poly in self.polylines:
+            for n in poly.lwpoints:
+                xs.append(n[0])
+                ys.append(n[1])
 
         height = max(xs) - min(xs)
         width = max(ys) - min(ys)
