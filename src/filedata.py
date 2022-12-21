@@ -30,6 +30,15 @@ class Arc():
     def __str__(self):
         return f'{self.atr}'
 
+class Circle():
+    def __init__(self, file):
+        self.atr = file
+        self.center = file.dxf.center
+        self.rad = file.dxf.radius
+
+    def __str__(self):
+        return f'{self.atr}'
+
 class Poly():
     def __init__(self, file):
         self.atr = file
@@ -42,6 +51,7 @@ class DxfData():
     def __init__(self):
         self.lines = []
         self.arcs = []
+        self.circles = []
         self.polylines = []
         self.lims = []
 
@@ -70,6 +80,9 @@ class DxfData():
             elif prim.dxftype() == "ARC":
                 self.arcs.append(Arc(prim))
 
+            elif prim.dxftype() == "CIRCLE":
+                self.circles.append(Circle(prim))
+
             elif prim.dxftype() == "LWPOLYLINE":
                 self.polylines.append(Poly(prim))
                 # file.write(str(prim))
@@ -84,19 +97,26 @@ class DxfData():
         gen_txt = open(self.txtPath, 'w')
 
         for line in self.lines:
-            # gen_txt.write(str(line.atr) + '\n')
+            gen_txt.write(str(line.atr) + '\n')
             for i in range(3):
                 gen_txt.write(str(line.coords[i]) + '\t')
             gen_txt.write(str(line.coords[3]) + '\n')
 
         for arc in self.arcs:
-            # gen_txt.write(str(arc.atr) + '\n')
+            gen_txt.write(str(arc.atr) + '\n')
             for i in range(4):
                 gen_txt.write(str(arc.coords[i]) + '\t')
             gen_txt.write(str(arc.rad) + '\n')
 
+        for circle in self.circles:
+            gen_txt.write(str(circle.atr) + '\n')
+            for i in range(2):
+                gen_txt.write(str(circle.center[i]) + '\t')
+            gen_txt.write(str(circle.rad) + '\n')
+
         for poly in self.polylines:
             # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
+            gen_txt.write(str(poly.atr) + '\n')
             for lwpoint in poly.lwpoints:
                 gen_txt.write(str(lwpoint) + '\t')
             gen_txt.write('\n')
