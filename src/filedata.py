@@ -53,9 +53,8 @@ class DxfData():
         self.lims = []
 
 
-    def get_primitives_data(self, source_path, target_path):
+    def get_primitives_data(self, source_path):
         self.dxfPath = source_path
-        self.txtPath = target_path
 
         try:
             doc = ezdxf.readfile(self.dxfPath)
@@ -90,7 +89,8 @@ class DxfData():
                     # self.polylines.append(str(x))
 
 
-    def print_data_into_txt(self):
+    def print_data_into_txt(self, target_path):
+        self.txtPath = target_path
         gen_txt = open(self.txtPath, 'w')
 
         for line in self.lines:

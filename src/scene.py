@@ -9,9 +9,10 @@ class Sketch():
         axes.set_ylabel('Y')
         axes.margins(0.05)
         axes.set_aspect("equal")
-        axes.set_xlim(-30, 30)
-        axes.set_ylim(-30, 30)
+        # axes.set_xlim(-30, 30)
+        # axes.set_ylim(-30, 30)
         axes.grid()
+        axes.set_axisbelow(True)
 
     # def draw_grid(self, axes, lims):
     #     self.lims = lims
@@ -41,9 +42,10 @@ class Sketch():
             axes.add_patch(Polygon([n[:2] for n in poly.lwpoints],
                                    closed=True,
                                    fill=False,
-                                   color='b',
+                                   color='r',
                                    alpha=1,
-                                   edgecolor='b'))
+                                   clip_on=False
+                                   ))
 
         for arc in self.geodata.arcs:
             axes.add_patch(Arc((arc.center[0], arc.center[1]),

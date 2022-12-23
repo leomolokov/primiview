@@ -2,11 +2,9 @@ class Buttons():
     def initButtons(self, dxf_data):
         self.dxf_data = dxf_data
 
-        self.actionExplore.triggered.connect(self.get_dxf_path)
-        self.actionSaveTo.triggered.connect(self.get_save_dir)
+        self.openButton.clicked.connect(self.openandshow_dxf)
+        self.savelikedxfButton.clicked.connect(self.savelike_dxf)
 
-        self.convertionButton.clicked.connect(self.convert_dxf)
-        self.checkdrawingButton.clicked.connect(self.draw_lines_call)
         # self.drawing_initialize.clicked.connect(self.draw_call)
         #
         # self.ConstSpinButton.stateChanged.connect(self.check_espin)
@@ -18,8 +16,11 @@ class Buttons():
     def get_save_dir(self):
         self.set_save_dir()
 
-    def convert_dxf(self):
+    def openandshow_dxf(self):
         source_path = self.explore_source_path()
+        self.dxf_data.get_primitives_data(source_path)
+        self.draw_lines_call()
+
+    def savelike_dxf(self):
         target_path = self.set_save_dir()
-        self.dxf_data.get_primitives_data(source_path, target_path)
-        self.dxf_data.print_data_into_txt()
+        self.dxf_data.print_data_into_txt(target_path)
