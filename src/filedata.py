@@ -103,9 +103,13 @@ class DxfData():
 
         for line in self.lines:
             gen_txt.write(str(line.atr) + '\n')
-            for i in range(3):
-                gen_txt.write(str(line.coords[i]) + '\t')
-            gen_txt.write(str(line.coords[3]) + '\n')
+            # for i in range(3):
+            #     gen_txt.write(str(line.coords[i]) + '\t')
+            # gen_txt.write(str(line.coords[3]) + '\n')
+            gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
+            gen_txt.write(str(line.start.y) + '\t')
+            gen_txt.write(str(line.end.x) + '\t')
+            gen_txt.write(str(line.end.y) + '\n')
 
         for arc in self.arcs:
             gen_txt.write(str(arc.atr) + '\n')
@@ -201,3 +205,12 @@ class DxfData():
 
         self.lims = [min(xs), max(xs), min(ys), max(ys)]
         return self.lims
+
+import math
+def truncate(number, digits) -> float:
+    # Improve accuracy with floating point operations, to avoid truncate(16.4, 2) = 16.39 or truncate(-1.13, 2) = -1.12
+    nbDecimals = len(str(number).split('.')[1])
+    if nbDecimals <= digits:
+        return number
+    stepper = 10.0 ** digits
+    return math.trunc(stepper * number) / stepper
