@@ -9,23 +9,8 @@ class Sketch():
         axes.set_ylabel('Y')
         axes.margins(0.05)
         axes.set_aspect("equal")
-        # axes.set_xlim(-30, 30)
-        # axes.set_ylim(-30, 30)
         axes.grid()
         axes.set_axisbelow(True)
-
-    # def draw_grid(self, axes, lims):
-    #     self.lims = lims
-    #
-    #     axes.cla()
-    #     axes.set_xlabel('X')
-    #     axes.set_ylabel('Y')
-    #     axes.margins(0.05)
-    #     axes.set_aspect("equal")
-    #     axes.set_xlim(lims[0], lims[1])
-    #     axes.set_ylim(lims[2], lims[3])
-    #     axes.grid()
-
 
     def draw_lines(self, axes):
         from matplotlib.lines import Line2D
@@ -34,32 +19,35 @@ class Sketch():
         self.draw_grid(axes)
 
         for line in self.geodata.lines:
-            axes.add_line(Line2D([line.coords[0], line.coords[2]],
-                                 [line.coords[1], line.coords[3]],
-                                 color='r'))
+            axes.add_line(Line2D([line.start.x, line.end.x],
+                                 [line.start.y, line.end.y],
+                                 color='g',
+                                 lw=1.5))
 
         for poly in self.geodata.polylines:
             axes.add_patch(Polygon([n[:2] for n in poly.lwpoints],
                                    closed=True,
                                    fill=False,
-                                   color='r',
+                                   color='g',
                                    alpha=1,
+                                   lw=1.5,
                                    clip_on=False
                                    ))
 
         for arc in self.geodata.arcs:
-            axes.add_patch(Arc((arc.center[0], arc.center[1]),
+            axes.add_patch(Arc((arc.center.x, arc.center.y),
                                width=2*arc.rad,
                                height=2*arc.rad,
                                theta1=arc.start_angle,
                                theta2=arc.end_angle,
-                               color='b',
+                               color='g',
+                               lw=1.5,
                                fill=False,
                                alpha=1))
 
         for circle in self.geodata.circles:
-            axes.add_patch(Circle((circle.center[0], circle.center[1]),
+            axes.add_patch(Circle((circle.center.x, circle.center.y),
                                   radius=circle.rad,
-                                  color='b',
+                                  color='g',
                                   fill=False,
                                   alpha=1))

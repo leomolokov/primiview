@@ -20,9 +20,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
         self.dxf_data = DxfData()
         self.sketch = Sketch()
 
-        # self.data = data
-        # self.orig_data = data.copy()
-
         fig = Figure()
         axes = fig.add_subplot(111)
 

@@ -14,10 +14,6 @@ class Line():
         self.end = vec3(file.dxf.end.x,
                         file.dxf.end.y,
                         file.dxf.end.z)
-        self.coords.append(file.dxf.start.x)
-        self.coords.append(file.dxf.start.y)
-        self.coords.append(file.dxf.end.x)
-        self.coords.append(file.dxf.end.y)
 
     def __str__(self):
         return f'{self.atr}'
@@ -26,11 +22,17 @@ class Arc():
     def __init__(self, file):
         self.atr = file
         self.rad = file.dxf.radius
-        self.start_point = file.start_point
-        self.end_point = file.end_point
         self.start_angle = file.dxf.start_angle
         self.end_angle = file.dxf.end_angle
-        self.center = [file.dxf.center[0], file.dxf.center[1]]
+        self.center = vec3(file.dxf.center.x,
+                           file.dxf.center.y,
+                           file.dxf.center.z)
+        self.start_point = vec3(file.start_point.x,
+                                file.start_point.y,
+                                file.start_point.z)
+        self.end_point = vec3(file.end_point.x,
+                              file.end_point.y,
+                              file.end_point.z)
 
     def __str__(self):
         return f'{self.atr}'
@@ -38,8 +40,10 @@ class Arc():
 class Circle():
     def __init__(self, file):
         self.atr = file
-        self.center = file.dxf.center
         self.rad = file.dxf.radius
+        self.center = vec3(file.dxf.center.x,
+                           file.dxf.center.y,
+                           file.dxf.center.z)
 
     def __str__(self):
         return f'{self.atr}'
@@ -90,13 +94,6 @@ class DxfData():
 
             elif prim.dxftype() == "LWPOLYLINE":
                 self.polylines.append(Poly(prim))
-                # file.write(str(prim))
-                # for x in prim.lwpoints:
-
-                    # print(*prim.lwpoints)
-                    # file.write(str(x))
-                    # self.polylines.append(str(x))
-
 
     def print_dxf_into_txt(self, target_path):
         self.txtPath = target_path
@@ -104,9 +101,6 @@ class DxfData():
 
         for line in self.lines:
             gen_txt.write(str(line.atr) + '\n')
-            # for i in range(3):
-            #     gen_txt.write(str(line.coords[i]) + '\t')
-            # gen_txt.write(str(line.coords[3]) + '\n')
             gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
             gen_txt.write(str(truncate(line.start.y, 2)) + '\t')
             gen_txt.write(str(truncate(line.end.x, 2)) + '\t')
@@ -114,18 +108,17 @@ class DxfData():
 
         for arc in self.arcs:
             gen_txt.write(str(arc.atr) + '\n')
-            for i in range(2):
-                gen_txt.write(str(truncate(arc.center[i], 2)) + '\t')
+            gen_txt.write(str(truncate(arc.center.x, 2)) + '\t')
+            gen_txt.write(str(truncate(arc.center.y, 2)) + '\t')
             gen_txt.write(str(truncate(arc.rad, 2)) + '\n')
 
         for circle in self.circles:
             gen_txt.write(str(circle.atr) + '\n')
-            for i in range(2):
-                gen_txt.write(str(truncate(circle.center[i], 2)) + '\t')
+            gen_txt.write(str(truncate(circle.center.x, 2)) + '\t')
+            gen_txt.write(str(truncate(circle.center.y, 2)) + '\t')
             gen_txt.write(str(truncate(circle.rad, 2)) + '\n')
 
         for poly in self.polylines:
-            # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
             gen_txt.write(str(poly.atr) + '\n')
             for lwpoint in poly.lwpoints:
                 for coord in range(2):
@@ -139,29 +132,30 @@ class DxfData():
         self.i = 0
 
         for line in self.lines:
-            gen_txt.write(self.i + '\t')
             gen_txt.write(str(line.atr) + '\n')
-            for i in range(3):
-                gen_txt.write(str(line.coords[i]) + '\t')
-            gen_txt.write(str(line.coords[3]) + '\n')
+            gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
+            gen_txt.write(str(truncate(line.start.y, 2)) + '\t')
+            gen_txt.write(str(truncate(line.end.x, 2)) + '\t')
+            gen_txt.write(str(truncate(line.end.y, 2)) + '\n')
 
         for arc in self.arcs:
             gen_txt.write(str(arc.atr) + '\n')
-            for i in range(2):
-                gen_txt.write(str(arc.center[i]) + '\t')
-            gen_txt.write(str(arc.rad) + '\n')
+            gen_txt.write(str(truncate(arc.center.x, 2)) + '\t')
+            gen_txt.write(str(truncate(arc.center.y, 2)) + '\t')
+            gen_txt.write(str(truncate(arc.rad, 2)) + '\n')
 
         for circle in self.circles:
             gen_txt.write(str(circle.atr) + '\n')
-            for i in range(2):
-                gen_txt.write(str(circle.center[i]) + '\t')
-            gen_txt.write(str(circle.rad) + '\n')
+            gen_txt.write(str(truncate(circle.center.x, 2)) + '\t')
+            gen_txt.write(str(truncate(circle.center.y, 2)) + '\t')
+            gen_txt.write(str(truncate(circle.rad, 2)) + '\n')
 
         for poly in self.polylines:
             # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
             gen_txt.write(str(poly.atr) + '\n')
             for lwpoint in poly.lwpoints:
-                gen_txt.write(str(lwpoint) + '\t')
+                for coord in range(2):
+                    gen_txt.write(str(truncate(lwpoint[coord], 2)) + '\t')
             gen_txt.write('\n')
         gen_txt.close()
 
