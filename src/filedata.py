@@ -107,27 +107,28 @@ class DxfData():
             #     gen_txt.write(str(line.coords[i]) + '\t')
             # gen_txt.write(str(line.coords[3]) + '\n')
             gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
-            gen_txt.write(str(line.start.y) + '\t')
-            gen_txt.write(str(line.end.x) + '\t')
-            gen_txt.write(str(line.end.y) + '\n')
+            gen_txt.write(str(truncate(line.start.y, 2)) + '\t')
+            gen_txt.write(str(truncate(line.end.x, 2)) + '\t')
+            gen_txt.write(str(truncate(line.end.y, 2)) + '\n')
 
         for arc in self.arcs:
             gen_txt.write(str(arc.atr) + '\n')
             for i in range(2):
-                gen_txt.write(str(arc.center[i]) + '\t')
-            gen_txt.write(str(arc.rad) + '\n')
+                gen_txt.write(str(truncate(arc.center[i], 2)) + '\t')
+            gen_txt.write(str(truncate(arc.rad, 2)) + '\n')
 
         for circle in self.circles:
             gen_txt.write(str(circle.atr) + '\n')
             for i in range(2):
-                gen_txt.write(str(circle.center[i]) + '\t')
-            gen_txt.write(str(circle.rad) + '\n')
+                gen_txt.write(str(truncate(circle.center[i], 2)) + '\t')
+            gen_txt.write(str(truncate(circle.rad, 2)) + '\n')
 
         for poly in self.polylines:
             # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
             gen_txt.write(str(poly.atr) + '\n')
             for lwpoint in poly.lwpoints:
-                gen_txt.write(str(lwpoint) + '\t')
+                for coord in range(2):
+                    gen_txt.write(str(truncate(lwpoint[coord], 2)) + '\t')
             gen_txt.write('\n')
         gen_txt.close()
 
@@ -165,46 +166,46 @@ class DxfData():
 
 
 
-    def define_dimes(self): #defines dimensions (profile) of a figure
-        xs = []
-        ys = []
-
-        for line in self.lines:
-            xs.append(line.coords[0])
-            ys.append(line.coords[1])
-
-        for arc in self.arcs:
-            xs.append(arc.start_point[0])
-            xs.append(arc.end_point[0])
-            ys.append(arc.start_point[1])
-            ys.append(arc.end_point[1])
-
-        for circle in self.circles:
-            xs.append(circle.center[0] + circle.rad)
-            xs.append(circle.center[0] - circle.rad)
-            ys.append(circle.center[1] + circle.rad)
-            ys.append(circle.center[1] - circle.rad)
-
-        for poly in self.polylines:
-            for n in poly.lwpoints:
-                xs.append(n[0])
-                ys.append(n[1])
-
-        height = max(xs) - min(xs)
-        width = max(ys) - min(ys)
-
-        return height, width
-
-    def define_extremums(self):
-        xs = []
-        ys = []
-
-        for line in self.lines:
-            xs.append(line.coords[0])
-            ys.append(line.coords[1])
-
-        self.lims = [min(xs), max(xs), min(ys), max(ys)]
-        return self.lims
+    # def define_dimes(self): #defines dimensions (profile) of a figure
+    #     xs = []
+    #     ys = []
+    #
+    #     for line in self.lines:
+    #         xs.append(line.coords[0])
+    #         ys.append(line.coords[1])
+    #
+    #     for arc in self.arcs:
+    #         xs.append(arc.start_point[0])
+    #         xs.append(arc.end_point[0])
+    #         ys.append(arc.start_point[1])
+    #         ys.append(arc.end_point[1])
+    #
+    #     for circle in self.circles:
+    #         xs.append(circle.center[0] + circle.rad)
+    #         xs.append(circle.center[0] - circle.rad)
+    #         ys.append(circle.center[1] + circle.rad)
+    #         ys.append(circle.center[1] - circle.rad)
+    #
+    #     for poly in self.polylines:
+    #         for n in poly.lwpoints:
+    #             xs.append(n[0])
+    #             ys.append(n[1])
+    #
+    #     height = max(xs) - min(xs)
+    #     width = max(ys) - min(ys)
+    #
+    #     return height, width
+    #
+    # def define_extremums(self):
+    #     xs = []
+    #     ys = []
+    #
+    #     for line in self.lines:
+    #         xs.append(line.coords[0])
+    #         ys.append(line.coords[1])
+    #
+    #     self.lims = [min(xs), max(xs), min(ys), max(ys)]
+    #     return self.lims
 
 import math
 def truncate(number, digits) -> float:
