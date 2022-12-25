@@ -2,7 +2,6 @@ import ezdxf
 
 import sys
 
-from vec3 import *
 from math_ops import *
 
 class Line():
