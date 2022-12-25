@@ -23,4 +23,4 @@ class Buttons():
 
     def savelike_dxf(self):
         target_path = self.set_save_dir()
-        self.dxf_data.print_data_into_txt(target_path)
+        self.dxf_data.print_dxf_into_txt(target_path)

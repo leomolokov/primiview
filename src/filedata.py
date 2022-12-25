@@ -1,11 +1,18 @@
 import ezdxf
 
 import sys
+from vec3 import *
 
 class Line():
     def __init__(self, file):
         self.coords = []
         self.atr = file
+        self.start = vec3(file.dxf.start.x,
+                          file.dxf.start.y,
+                          file.dxf.start.z)
+        self.end = vec3(file.dxf.end.x,
+                        file.dxf.end.y,
+                        file.dxf.end.z)
         self.coords.append(file.dxf.start.x)
         self.coords.append(file.dxf.start.y)
         self.coords.append(file.dxf.end.x)
@@ -51,6 +58,7 @@ class DxfData():
         self.circles = []
         self.polylines = []
         self.lims = []
+        self.halfprims = []
 
 
     def get_primitives_data(self, source_path):
@@ -89,7 +97,7 @@ class DxfData():
                     # self.polylines.append(str(x))
 
 
-    def print_data_into_txt(self, target_path):
+    def print_dxf_into_txt(self, target_path):
         self.txtPath = target_path
         gen_txt = open(self.txtPath, 'w')
 
@@ -118,6 +126,40 @@ class DxfData():
                 gen_txt.write(str(lwpoint) + '\t')
             gen_txt.write('\n')
         gen_txt.close()
+
+    def print_prims_into_txt(self, target_path):
+        self.txtPath = target_path
+        gen_txt = open(self.txtPath, 'w')
+        self.i = 0
+
+        for line in self.lines:
+            gen_txt.write(self.i + '\t')
+            gen_txt.write(str(line.atr) + '\n')
+            for i in range(3):
+                gen_txt.write(str(line.coords[i]) + '\t')
+            gen_txt.write(str(line.coords[3]) + '\n')
+
+        for arc in self.arcs:
+            gen_txt.write(str(arc.atr) + '\n')
+            for i in range(2):
+                gen_txt.write(str(arc.center[i]) + '\t')
+            gen_txt.write(str(arc.rad) + '\n')
+
+        for circle in self.circles:
+            gen_txt.write(str(circle.atr) + '\n')
+            for i in range(2):
+                gen_txt.write(str(circle.center[i]) + '\t')
+            gen_txt.write(str(circle.rad) + '\n')
+
+        for poly in self.polylines:
+            # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
+            gen_txt.write(str(poly.atr) + '\n')
+            for lwpoint in poly.lwpoints:
+                gen_txt.write(str(lwpoint) + '\t')
+            gen_txt.write('\n')
+        gen_txt.close()
+
+
 
     def define_dimes(self): #defines dimensions (profile) of a figure
         xs = []
