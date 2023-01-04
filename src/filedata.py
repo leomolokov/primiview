@@ -97,6 +97,7 @@ class DxfData():
 
     def print_dxf_into_txt(self, target_path):
         self.txtPath = target_path
+
         gen_txt = open(self.txtPath, 'w')
 
         for line in self.lines:
@@ -128,6 +129,7 @@ class DxfData():
 
     def print_prims_into_txt(self, target_path):
         self.txtPath = target_path
+
         gen_txt = open(self.txtPath, 'w')
         self.i = 0
 
