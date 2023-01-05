@@ -131,34 +131,98 @@ class DxfData():
         self.txtPath = target_path
 
         gen_txt = open(self.txtPath, 'w')
-        self.i = 0
+        self.prev_point = []
+        self.next_point = []
 
         for line in self.lines:
-            gen_txt.write(str(line.atr) + '\n')
-            gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
-            gen_txt.write(str(truncate(line.start.y, 2)) + '\t')
-            gen_txt.write(str(truncate(line.end.x, 2)) + '\t')
-            gen_txt.write(str(truncate(line.end.y, 2)) + '\n')
+            self.prev_point = [truncate(line.start.x, 2),
+                               truncate(line.start.y, 2),
+                               0]
+
+            if self.prev_point != self.next_point:
+                gen_txt.writelines(self.prev_point)
+                gen_txt.write('\n')
+
+            self.next_point = [truncate(line.end.x, 2),
+                               truncate(line.end.y, 2),
+                               0]
+            gen_txt.writelines(self.next_point)
+            gen_txt.write('\n')
+            # gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
+            # gen_txt.write(str(truncate(line.start.y, 2)) + '\t')
+            # gen_txt.write(0 + '\n')
+            # gen_txt.write(str(truncate(line.end.x, 2)) + '\t')
+            # gen_txt.write(str(truncate(line.end.y, 2)) + '\t')
+            # gen_txt.write(0 + '\n')
 
         for arc in self.arcs:
-            gen_txt.write(str(arc.atr) + '\n')
-            gen_txt.write(str(truncate(arc.center.x, 2)) + '\t')
-            gen_txt.write(str(truncate(arc.center.y, 2)) + '\t')
-            gen_txt.write(str(truncate(arc.rad, 2)) + '\n')
+            self.prev_point = [truncate(arc.start_point.x, 2),
+                              truncate(arc.start_point.y, 2),
+                              0]
+
+            if self.prev_point != self.next_point:
+                gen_txt.writelines(self.prev_point)
+                gen_txt.write('\n')
+
+            self.next_point = [truncate(arc.end_point.x, 2),
+                              truncate(arc.end_point.y, 2),
+                              truncate(arc.rad, 2)]
+            gen_txt.writelines(self.next_point)
+            gen_txt.write('\n')
+            # gen_txt.write(str(truncate(arc.start_point.x, 2)) + '\t')
+            # gen_txt.write(str(truncate(arc.start_point.y, 2)) + '\t')
+            # gen_txt.write(0 + '\n')
+            # gen_txt.write(str(truncate(arc.end_point.x, 2)) + '\t')
+            # gen_txt.write(str(truncate(arc.end_point.y, 2)) + '\t')
+            # gen_txt.write(str(truncate(arc.rad, 2)) + '\n')
 
         for circle in self.circles:
-            gen_txt.write(str(circle.atr) + '\n')
-            gen_txt.write(str(truncate(circle.center.x, 2)) + '\t')
-            gen_txt.write(str(truncate(circle.center.y, 2)) + '\t')
-            gen_txt.write(str(truncate(circle.rad, 2)) + '\n')
+            if not self.prev_point:
+                self.prev_point = [truncate(circle.center.x, 2) + truncate(circle.rad, 2),
+                                   truncate(circle.center.y, 2),
+                                   0]
+
+            if self.prev_point != self.next_point:
+                gen_txt.writelines(self.prev_point)
+                gen_txt.write('\n')
+
+            self.next_point = [self.prev_point[0],
+                               self.prev_point[1],
+                               truncate(circle.rad, 2)]
+            gen_txt.writelines(self.next_point)
+            gen_txt.write('\n')
+            # gen_txt.write(str(truncate(circle.center.x, 2)) + '\t')
+            # gen_txt.write(str(truncate(circle.center.y, 2)) + '\t')
+            # gen_txt.write(str(truncate(circle.rad, 2)) + '\n')
 
         for poly in self.polylines:
-            # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
-            gen_txt.write(str(poly.atr) + '\n')
             for lwpoint in poly.lwpoints:
-                for coord in range(2):
-                    gen_txt.write(str(truncate(lwpoint[coord], 2)) + '\t')
-            gen_txt.write('\n')
+                self.prev_point = (truncate(lwpoint[0], 2),
+                                   truncate(lwpoint[1], 2),
+                                   0)
+
+                if self.prev_point != self.next_point:
+                    gen_txt.writelines(self.prev_point)
+                    gen_txt.write('\n')
+
+                # self.next_point = [self.prev_point[0],
+                #                    self.prev_point[1],
+                #                    truncate(circle.rad, 2)]
+                    # self.prev_point = [truncate(line.start.x, 2),
+                    #                    truncate(line.start.y, 2),
+                    #                    0]
+                    #
+                    # if self.prev_point != self.next_point:
+                    #     gen_txt.write(str(self.prev_point, sep='\t', end='\n'))
+
+
+
+            # gen_txt.write(str(n[:2] for n in poly.lwpoints) + '\t')
+            # gen_txt.write(str(poly.atr) + '\n')
+            # for lwpoint in poly.lwpoints:
+            #     for coord in range(2):
+            #         gen_txt.write(str(truncate(lwpoint[coord], 2)) + '\t')
+            # gen_txt.write('\n')
         gen_txt.close()
 
 
