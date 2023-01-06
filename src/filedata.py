@@ -140,20 +140,14 @@ class DxfData():
                                0]
 
             if self.prev_point != self.next_point:
-                gen_txt.writelines(self.prev_point)
+                gen_txt.writelines(str(self.prev_point))
                 gen_txt.write('\n')
 
             self.next_point = [truncate(line.end.x, 2),
                                truncate(line.end.y, 2),
                                0]
-            gen_txt.writelines(self.next_point)
+            gen_txt.writelines(str(self.next_point))
             gen_txt.write('\n')
-            # gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
-            # gen_txt.write(str(truncate(line.start.y, 2)) + '\t')
-            # gen_txt.write(0 + '\n')
-            # gen_txt.write(str(truncate(line.end.x, 2)) + '\t')
-            # gen_txt.write(str(truncate(line.end.y, 2)) + '\t')
-            # gen_txt.write(0 + '\n')
 
         for arc in self.arcs:
             self.prev_point = [truncate(arc.start_point.x, 2),
@@ -161,20 +155,14 @@ class DxfData():
                               0]
 
             if self.prev_point != self.next_point:
-                gen_txt.writelines(self.prev_point)
+                gen_txt.writelines(str(self.prev_point))
                 gen_txt.write('\n')
 
             self.next_point = [truncate(arc.end_point.x, 2),
                               truncate(arc.end_point.y, 2),
                               truncate(arc.rad, 2)]
-            gen_txt.writelines(self.next_point)
+            gen_txt.writelines(str(self.next_point))
             gen_txt.write('\n')
-            # gen_txt.write(str(truncate(arc.start_point.x, 2)) + '\t')
-            # gen_txt.write(str(truncate(arc.start_point.y, 2)) + '\t')
-            # gen_txt.write(0 + '\n')
-            # gen_txt.write(str(truncate(arc.end_point.x, 2)) + '\t')
-            # gen_txt.write(str(truncate(arc.end_point.y, 2)) + '\t')
-            # gen_txt.write(str(truncate(arc.rad, 2)) + '\n')
 
         for circle in self.circles:
             if not self.prev_point:
@@ -183,13 +171,13 @@ class DxfData():
                                    0]
 
             if self.prev_point != self.next_point:
-                gen_txt.writelines(self.prev_point)
+                gen_txt.writelines(str(self.prev_point))
                 gen_txt.write('\n')
 
             self.next_point = [self.prev_point[0],
                                self.prev_point[1],
                                truncate(circle.rad, 2)]
-            gen_txt.writelines(self.next_point)
+            gen_txt.writelines(str(self.next_point))
             gen_txt.write('\n')
             # gen_txt.write(str(truncate(circle.center.x, 2)) + '\t')
             # gen_txt.write(str(truncate(circle.center.y, 2)) + '\t')
@@ -202,18 +190,8 @@ class DxfData():
                                    0)
 
                 if self.prev_point != self.next_point:
-                    gen_txt.writelines(self.prev_point)
+                    gen_txt.writelines(str(self.prev_point))
                     gen_txt.write('\n')
-
-                # self.next_point = [self.prev_point[0],
-                #                    self.prev_point[1],
-                #                    truncate(circle.rad, 2)]
-                    # self.prev_point = [truncate(line.start.x, 2),
-                    #                    truncate(line.start.y, 2),
-                    #                    0]
-                    #
-                    # if self.prev_point != self.next_point:
-                    #     gen_txt.write(str(self.prev_point, sep='\t', end='\n'))
 
 
 
