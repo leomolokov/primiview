@@ -79,21 +79,26 @@ class DxfData():
 
         msp = doc.modelspace()
 
-        for ins in msp.query("INSERT"):
+        # for ins in msp.query("INSERT"):
+        for ins in msp.query('INSERT'):
             print(ins)
+            # ins.explode(all)
 
-        for prim in msp.query("*"):
-            if prim.dxftype() == "LINE":
-                self.lines.append(Line(prim))
+        for entity in msp.query('*'):
+            # entity.explode()
+            if entity.dxftype() == "LINE":
 
-            elif prim.dxftype() == "ARC":
-                self.arcs.append(Arc(prim))
+                self.lines.append(Line(entity))
 
-            elif prim.dxftype() == "CIRCLE":
-                self.circles.append(Circle(prim))
+            elif entity.dxftype() == "ARC":
+                self.arcs.append(Arc(entity))
 
-            elif prim.dxftype() == "LWPOLYLINE":
-                self.polylines.append(Poly(prim))
+            elif entity.dxftype() == "CIRCLE":
+                self.circles.append(Circle(entity))
+
+            elif entity.dxftype() == "LWPOLYLINE":
+                self.polylines.append(Poly(entity))
+                self.polylines.append(Poly(entity))
 
     def print_dxf_into_txt(self, target_path):
         self.txtPath = target_path
@@ -192,6 +197,50 @@ class DxfData():
 
         gen_txt.close()
 
+    def saveas_svg(self, target_path):
+        import svgwrite
+
+        self.svgPath = target_path
+
+        # gen_svg = svg.drawing(self.svgPath, profile='tiny')
+        # gen_svg = svg.drawing('text.svg', profile='tiny')
+        # gen_svg.save()
+
+        dwg = svgwrite.Drawing(self.svgPath, profile='tiny')
+        current_group = dwg.add(dwg.g(id=1, stroke='red', stroke_width=3, fill='none', fill_opacity=0))
+        dwg.add(dwg.line((0, 0), (10, 0), stroke=svgwrite.rgb(10, 10, 16, '%')))
+        dwg.add(dwg.text('Test', insert=(0, 0.2)))
+        dwg.save()
+
+        def addArc(dwg, current_group, p0, p1, radius):
+            """ Adds an arc that bulges to the right as it moves from p0 to p1 """
+            args = {'x0': p0[0],
+                    'y0': p0[1],
+                    'xradius': radius,
+                    'yradius': radius,
+                    'ellipseRotation': 0,  # has no effect for circles
+                    'x1': (p1[0] - p0[0]),
+                    'y1': (p1[1] - p0[1])}
+            current_group.add(
+                dwg.path(d="M %(x0)f,%(y0)f a %(xradius)f,%(yradius)f %(ellipseRotation)f 0,0 %(x1)f,%(y1)f" % args,
+                         fill="none",
+                         stroke='red', stroke_width=1
+                         ))
+
+        #https://svgwrite.readthedocs.io/en/latest/classes/drawing.html
+        for line in self.lines:
+            dwg.add(dwg.line(line.start, line.end))
+
+        #https://stackoverflow.com/questions/25019441/arc-pie-cut-in-svgwrite
+        for arc in self.arcs:
+            addArc(dwg, current_group, p0=arc.start_point, p1=arc.end_point, radius=arc.rad)
+
+        for circle in self.circles:
+            dwg.add(dwg.circle(center=circle.center,
+                               r=circle.rad))
+
+        for poly in self.polylines:
+            dwg.add(dwg.polyline(points=poly.lwpoints))
 
 
     # def define_dimes(self): #defines dimensions (profile) of a figure

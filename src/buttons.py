@@ -4,18 +4,11 @@ class Buttons():
 
         self.openButton.clicked.connect(self.openandshow_dxf)
         self.savelikedxfButton.clicked.connect(self.savelike_dxf)
+        # self.savelikedxfButton.clicked.connect(self.dxf_data.print_dxf_into_txt(self.set_save_dir()))
         self.cncsaveButton.clicked.connect(self.savelike_prims)
-
-        # self.drawing_initialize.clicked.connect(self.draw_call)
-        #
-        # self.ConstSpinButton.stateChanged.connect(self.check_espin)
-        # self.transparency_checkBox.stateChanged.connect(self.check_transparency)
-
-    # def get_dxf_path(self):
-    #     self.explore_source_path()
-    #
-    # def get_save_dir(self):
-    #     self.set_save_dir()
+        # self.cncsaveButton.clicked.connect(self.dxf_data.print_prims_into_txt(self.set_save_dir()))
+        # self.svgsaveButton.clicked.connect(self.dxf_data.saveas_svg(self.set_save_dir))
+        self.svgsaveButton.clicked.connect(self.savelike_svg)
 
     def openandshow_dxf(self):
         # source_path = self.explore_source_path()
@@ -32,3 +25,6 @@ class Buttons():
     def savelike_prims(self):
         self.dxf_data.print_prims_into_txt(self.set_save_dir())
         # self.dxf_data.print_prims_into_txt(if not hasattr(self, 'self.txtPath'): self.set_save_dir())
+
+    def savelike_svg(self):
+        self.dxf_data.saveas_svg(self.set_save_dir)

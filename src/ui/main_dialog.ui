@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>679</width>
-    <height>535</height>
+    <width>711</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,6 +33,13 @@
             <height>20</height>
            </size>
           </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(85, 170, 0);
+color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 255, 0, 69), stop:0.375 rgba(255, 255, 0, 69), stop:0.423533 rgba(251, 255, 0, 145), stop:0.45 rgba(247, 255, 0, 208), stop:0.477581 rgba(255, 244, 71, 130), stop:0.518717 rgba(255, 218, 71, 130), stop:0.55 rgba(255, 255, 0, 255), stop:0.57754 rgba(255, 203, 0, 130), stop:0.625 rgba(255, 255, 0, 69), stop:1 rgba(255, 255, 0, 69));</string>
+          </property>
           <property name="text">
            <string>Open DXF</string>
           </property>
@@ -47,7 +54,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Save like DXF</string>
+           <string>Save as TXT (dxf-like)</string>
           </property>
          </widget>
         </item>
@@ -60,7 +67,14 @@
            </size>
           </property>
           <property name="text">
-           <string>Save for CNC</string>
+           <string>Save as TXT</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="svgsaveButton">
+          <property name="text">
+           <string>Save as SVG</string>
           </property>
          </widget>
         </item>
@@ -93,6 +107,10 @@
           <height>300</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true">background-image: url(:/--/logo1.bmp);
+</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -104,8 +122,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>679</width>
-     <height>21</height>
+     <width>711</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -133,6 +151,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="iconrsc.qrc"/>
+ </resources>
  <connections/>
 </ui>
