@@ -194,9 +194,8 @@ class DxfData():
         import svgwrite
 
         dwg = svgwrite.Drawing(target_path, profile='tiny')
-        current_group = dwg.add(dwg.g(id=1, stroke='red', stroke_width=3, fill='none', fill_opacity=0))
-        dwg.add(dwg.line((0, 0), (10, 0), stroke=svgwrite.rgb(10, 10, 16, '%')))
-        dwg.add(dwg.text('Test', insert=(0, 0.2)))
+        current_group = dwg.add(dwg.g(id=1,
+                                      stroke=svgwrite.rgb(10, 10, 16, '%')))
 
         def addArc(dwg, current_group, p0, p1, radius):
             """ Adds an arc that bulges to the right as it moves from p0 to p1 """
@@ -210,27 +209,31 @@ class DxfData():
             current_group.add(
                 dwg.path(d="M %(x0)f,%(y0)f a %(xradius)f,%(yradius)f %(ellipseRotation)f 0,0 %(x1)f,%(y1)f" % args,
                          fill="none",
-                         stroke='red', stroke_width=1
+                         stroke=svgwrite.rgb(10, 10, 16, '%')
                          ))
 
         #https://svgwrite.readthedocs.io/en/latest/classes/drawing.html
         for line in self.lines:
-            dwg.add(dwg.line(line.start[:2], line.end[:2]))
+            dwg.add(dwg.line(start=line.start[:2],
+                             end=line.end[:2],
+                             stroke=svgwrite.rgb(10, 10, 16, '%')))
 
         #https://stackoverflow.com/questions/25019441/arc-pie-cut-in-svgwrite
         for arc in self.arcs:
-            addArc(dwg, current_group, p0=arc.start_point, p1=arc.end_point, radius=arc.rad)
+            addArc(dwg, current_group, p0=arc.start_point[:2], p1=arc.end_point[:2], radius=arc.rad)
 
         for circle in self.circles:
-            dwg.add(dwg.circle(center=circle.center,
-                               r=circle.rad))
+            dwg.add(dwg.circle(center=circle.center[:2],
+                               r=circle.rad,
+                               stroke=svgwrite.rgb(10, 10, 16, '%')))
 
         for poly in self.polylines:
             # dwg.add(dwg.polyline(points=poly.lwpoints))
             self.polys = []
             for lwpoint in poly.lwpoints:
                 self.polys.append(lwpoint[:2])
-            dwg.add(dwg.polyline(points=self.polys))
+            dwg.add(dwg.polyline(points=self.polys,
+                                 stroke=svgwrite.rgb(10, 10, 16, '%')))
 
         dwg.save()
 
