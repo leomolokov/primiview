@@ -26,6 +26,14 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
 
         self.initButtons()
 
+    # def check_folder(self, destination):
+    #     from pathlib import Path
+    #     p = Path('.')
+    #     p2 = p / str(destination)
+    #     if p2.exists():
+    #         p = p2
+    #     p = p.absolute()
+
     def explore_source_path(self):
         from pathlib import Path
         p = Path('.')
@@ -33,11 +41,12 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
         if p2.exists():
             p = p2
         p = p.absolute()
+        # dir1 = self.check_folder('/test_dxfs')
         file_filter = 'Data file (*.dxf)'
         response = QFileDialog.getOpenFileName(
             parent=self,
             caption='Select dxf to read',
-            directory= str(p), #os.getcwd() + '/test_dxfs',
+            directory=str(p), #os.getcwd() + '/test_dxfs',
             filter=file_filter
         )
         self.dxfPath = response[0]
@@ -46,11 +55,17 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
 
 
     def set_save_dir(self):
+        from pathlib import Path
+        p = Path('.')
+        p2 = p / 'test_dxfs'
+        if p2.exists():
+            p = p2
+        p = p.absolute()
         file_filter = 'Data file (*.txt)'
         response = QFileDialog.getSaveFileName(
             self,
             caption='Select a folder',
-            directory=os.getcwd(),
+            directory=str(p), #os.getcwd(),
             filter=file_filter
         )
         # self.txtPath = response[0]

@@ -71,25 +71,18 @@ class DxfData():
 
         try:
             doc = ezdxf.readfile(self.dxfPath)
-        except IOError as e:
-            raise RuntimeError(f"Not a DXF file or a generic I/O error.") from e
+        # except IOError as e:
+        #     raise RuntimeError(f"Not a DXF file or a generic I/O error.") from e
         except ezdxf.DXFStructureError:
             print(f"Invalid or corrupted DXF file.")
             sys.exit(2)
 
         msp = doc.modelspace()
 
-        # for ins in msp.query("INSERT"):
         for ins in msp.query('INSERT'):
-            # print(ins, *ins.virtual_entities())
             ins.explode()
-            # ins.explode(all)
-
-        # for e in msp.query('INSERT'):
-
 
         for entity in msp.query('*'):
-            # entity.explode()
             if entity.dxftype() == "LINE":
                 self.lines.append(Line(entity))
 
@@ -101,12 +94,9 @@ class DxfData():
 
             elif entity.dxftype() == "LWPOLYLINE":
                 self.polylines.append(Poly(entity))
-                self.polylines.append(Poly(entity))
 
     def print_dxf_into_txt(self, target_path):
-        self.txtPath = target_path
-
-        gen_txt = open(self.txtPath, 'w')
+        gen_txt = open(target_path, 'w')
 
         for line in self.lines:
             gen_txt.write(str(line.atr) + '\n')
@@ -203,17 +193,10 @@ class DxfData():
     def saveas_svg(self, target_path):
         import svgwrite
 
-        # self.svgPath = target_path
-
-        # gen_svg = svg.drawing(self.svgPath, profile='tiny')
-        # gen_svg = svg.drawing('text.svg', profile='tiny')
-        # gen_svg.save()
-
         dwg = svgwrite.Drawing(target_path, profile='tiny')
         current_group = dwg.add(dwg.g(id=1, stroke='red', stroke_width=3, fill='none', fill_opacity=0))
         dwg.add(dwg.line((0, 0), (10, 0), stroke=svgwrite.rgb(10, 10, 16, '%')))
         dwg.add(dwg.text('Test', insert=(0, 0.2)))
-        dwg.save()
 
         def addArc(dwg, current_group, p0, p1, radius):
             """ Adds an arc that bulges to the right as it moves from p0 to p1 """
@@ -245,6 +228,7 @@ class DxfData():
         for poly in self.polylines:
             dwg.add(dwg.polyline(points=poly.lwpoints))
 
+        dwg.save()
 
     # def define_dimes(self): #defines dimensions (profile) of a figure
     #     xs = []
