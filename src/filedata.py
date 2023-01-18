@@ -81,13 +81,16 @@ class DxfData():
 
         # for ins in msp.query("INSERT"):
         for ins in msp.query('INSERT'):
-            print(ins)
+            # print(ins, *ins.virtual_entities())
+            ins.explode()
             # ins.explode(all)
+
+        # for e in msp.query('INSERT'):
+
 
         for entity in msp.query('*'):
             # entity.explode()
             if entity.dxftype() == "LINE":
-
                 self.lines.append(Line(entity))
 
             elif entity.dxftype() == "ARC":
@@ -200,13 +203,13 @@ class DxfData():
     def saveas_svg(self, target_path):
         import svgwrite
 
-        self.svgPath = target_path
+        # self.svgPath = target_path
 
         # gen_svg = svg.drawing(self.svgPath, profile='tiny')
         # gen_svg = svg.drawing('text.svg', profile='tiny')
         # gen_svg.save()
 
-        dwg = svgwrite.Drawing(self.svgPath, profile='tiny')
+        dwg = svgwrite.Drawing(target_path, profile='tiny')
         current_group = dwg.add(dwg.g(id=1, stroke='red', stroke_width=3, fill='none', fill_opacity=0))
         dwg.add(dwg.line((0, 0), (10, 0), stroke=svgwrite.rgb(10, 10, 16, '%')))
         dwg.add(dwg.text('Test', insert=(0, 0.2)))
@@ -229,7 +232,7 @@ class DxfData():
 
         #https://svgwrite.readthedocs.io/en/latest/classes/drawing.html
         for line in self.lines:
-            dwg.add(dwg.line(line.start, line.end))
+            dwg.add(dwg.line(line.start[:2], line.end[:2]))
 
         #https://stackoverflow.com/questions/25019441/arc-pie-cut-in-svgwrite
         for arc in self.arcs:

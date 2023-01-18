@@ -11,14 +11,8 @@ import os
 
 class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
     def __init__(self):
-        from filedata import DxfData
-        from scene import Sketch
-
         QMainWindow.__init__(self)
         self.setupUi(self)
-
-        self.dxf_data = DxfData()
-        self.sketch = Sketch()
 
         fig = Figure()
         axes = fig.add_subplot(111)
@@ -30,16 +24,20 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
         self.axes = axes
         self.canvas = canvas
 
-        self.initButtons(self.dxf_data)
-        self.sketch.initSketch(self.dxf_data)
-
+        self.initButtons()
 
     def explore_source_path(self):
+        from pathlib import Path
+        p = Path('.')
+        p2 = p / 'test_dxfs'
+        if p2.exists():
+            p = p2
+        p = p.absolute()
         file_filter = 'Data file (*.dxf)'
         response = QFileDialog.getOpenFileName(
             parent=self,
             caption='Select dxf to read',
-            directory=os.getcwd(),
+            directory= str(p), #os.getcwd() + '/test_dxfs',
             filter=file_filter
         )
         self.dxfPath = response[0]
@@ -55,9 +53,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
             directory=os.getcwd(),
             filter=file_filter
         )
-        self.txtPath = response[0]
-        print(self.txtPath)
-        return self.txtPath
+        # self.txtPath = response[0]
+        # print(self.txtPath)
+        return response[0]
 
 
     def redraw(self):
