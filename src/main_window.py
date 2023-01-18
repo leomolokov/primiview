@@ -41,7 +41,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
         if p2.exists():
             p = p2
         p = p.absolute()
-        # dir1 = self.check_folder('/test_dxfs')
+        # dir1 = self.check_folder('test_dxfs')
         file_filter = 'Data file (*.dxf)'
         response = QFileDialog.getOpenFileName(
             parent=self,
@@ -54,14 +54,14 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
         return self.dxfPath
 
 
-    def set_save_dir(self):
+    def set_save_dir(self, type: 'txt' or 'svg'):
         from pathlib import Path
         p = Path('.')
         p2 = p / 'test_dxfs'
         if p2.exists():
             p = p2
         p = p.absolute()
-        file_filter = 'Data file (*.txt)'
+        file_filter = 'Data file (*.' + type +')'
         response = QFileDialog.getSaveFileName(
             self,
             caption='Select a folder',

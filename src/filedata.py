@@ -226,7 +226,11 @@ class DxfData():
                                r=circle.rad))
 
         for poly in self.polylines:
-            dwg.add(dwg.polyline(points=poly.lwpoints))
+            # dwg.add(dwg.polyline(points=poly.lwpoints))
+            self.polys = []
+            for lwpoint in poly.lwpoints:
+                self.polys.append(lwpoint[:2])
+            dwg.add(dwg.polyline(points=self.polys))
 
         dwg.save()
 
