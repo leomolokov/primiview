@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(711, 556)
+        MainWindow.resize(753, 589)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -32,7 +32,9 @@ class Ui_MainWindow(object):
         self.openButton.setMinimumSize(QtCore.QSize(0, 20))
         self.openButton.setAutoFillBackground(False)
         self.openButton.setStyleSheet("background-color: rgb(85, 170, 0);\n"
-"color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 255, 0, 69), stop:0.375 rgba(255, 255, 0, 69), stop:0.423533 rgba(251, 255, 0, 145), stop:0.45 rgba(247, 255, 0, 208), stop:0.477581 rgba(255, 244, 71, 130), stop:0.518717 rgba(255, 218, 71, 130), stop:0.55 rgba(255, 255, 0, 255), stop:0.57754 rgba(255, 203, 0, 130), stop:0.625 rgba(255, 255, 0, 69), stop:1 rgba(255, 255, 0, 69));")
+"border-color: rgb(0, 0, 0);\n"
+"color: rgb(255, 255, 127);\n"
+"")
         self.openButton.setObjectName("openButton")
         self.verticalLayout.addWidget(self.openButton)
         self.savelikedxfButton = QtWidgets.QPushButton(self.centralwidget)
@@ -56,13 +58,12 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.MplWidget.sizePolicy().hasHeightForWidth())
         self.MplWidget.setSizePolicy(sizePolicy)
         self.MplWidget.setMinimumSize(QtCore.QSize(300, 300))
-        self.MplWidget.setStyleSheet("background-image: url(:/--/logo1.bmp);")
         self.MplWidget.setObjectName("MplWidget")
         self.horizontalLayout.addWidget(self.MplWidget)
         self.gridLayout.addLayout(self.horizontalLayout, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 711, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 753, 22))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -87,7 +88,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.openButton.setText(_translate("MainWindow", "Open DXF"))
         self.savelikedxfButton.setText(_translate("MainWindow", "Save as TXT (dxf-like)"))
-        self.cncsaveButton.setText(_translate("MainWindow", "Save as TXT"))
+        self.cncsaveButton.setText(_translate("MainWindow", "Save as TXT(x, y, r)"))
         self.svgsaveButton.setText(_translate("MainWindow", "Save as SVG"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionExplore.setText(_translate("MainWindow", "Explore"))

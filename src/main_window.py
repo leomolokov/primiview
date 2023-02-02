@@ -49,9 +49,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
             directory=str(p), #os.getcwd() + '/test_dxfs',
             filter=file_filter
         )
-        self.dxfPath = response[0]
-        print(self.dxfPath)
-        return self.dxfPath
+        return response[0]
 
 
     def set_save_dir(self, type: 'txt' or 'svg'):
@@ -68,8 +66,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, Buttons):
             directory=str(p), #os.getcwd(),
             filter=file_filter
         )
-        # self.txtPath = response[0]
-        # print(self.txtPath)
         return response[0]
 
 
