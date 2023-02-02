@@ -1,20 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<svg version="1.1" 
-	width="100%" 
-	height="100%"
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg version="1.1" width="100%" height="100%"
 	viewBox="-69.99999999999999 -90.0 400.0 190.0"
-	xmlns="http://www.w3.org/2000/svg"
 	baseProfile="full"
->
-<!--
-	baseProfile="full"
-
 	xmlns="http://www.w3.org/2000/svg"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
-	xmlns:ev="http://www.w3.org/2001/xml-events"
--->
+	xmlns:ev="http://www.w3.org/2001/xml-events">
 
-	<g><g transform="scale(1, -1)">
+	<g transform="scale=(1,-1)">
 
 		<path d="M 160.0,1.3512323399573678e-14 A5.0,5.0
 		0 0,1 170.0,1.29e-14"
@@ -114,5 +106,5 @@
 
 		<circle cx="260.0" cy="50.00000000000001" r="19.99999999999999" fill="none" stroke="red" stroke-width="2"/>
 
-	</g></g>
+	</g>
 </svg>

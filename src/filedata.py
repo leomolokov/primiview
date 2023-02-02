@@ -198,10 +198,10 @@ class DxfData():
                                        0)
 
                 elif lwpoint[4] != 0:
-                    poly_rad = abs(lwpoint[4] + 1/lwpoint[4]) * math.sqrt((lwpoint[0] - self.prev_point[0]) ** 2 + (lwpoint[1] - self.prev_point[1]) ** 2) / 4
+                    polyarc_rad = abs(lwpoint[4] + 1/lwpoint[4]) * math.sqrt((lwpoint[0] - self.prev_point[0]) ** 2 + (lwpoint[1] - self.prev_point[1]) ** 2) / 4
                     self.next_point = (truncate(lwpoint[0], 2),
                                        truncate(lwpoint[1], 2),
-                                       truncate(poly_rad, 2))
+                                       truncate(polyarc_rad, 2))
                 gen_txt.write('\t'.join(str(i) for i in self.next_point))
                 gen_txt.write('\n')
 
@@ -281,7 +281,7 @@ class DxfData():
                         '\txmlns="http://www.w3.org/2000/svg"\n'
                         '\txmlns:xlink="http://www.w3.org/1999/xlink"\n',
                         '\txmlns:ev="http://www.w3.org/2001/xml-events">\n\n'])
-        f.write(f'\t<g transform="scale=(1,-1)">\n\n')
+        f.write(f'\t<g transform="scale(1,-1)">\n\n')
 
         for line in self.lines:
             f.write(f'\t\t<line x1="{line.start.x}" y1="{line.start.y}" x2="{line.end.x}" y2="{line.end.y}" stroke="red" stroke-width="2"/>\n\n')
