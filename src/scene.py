@@ -27,7 +27,7 @@ class Sketch():
                                  lw=1.5))
 
         for poly in self.geodata.polylines:
-            for current, next in zip(poly.lwpoints[::2], poly.lwpoints[1::2]):
+            for current, next in zip(poly.lwpoints[::], poly.lwpoints[1::]):
                 if next[4] == 0:
                     axes.add_line(Line2D([current[0], next[0]],
                                          [current[1], next[1]],

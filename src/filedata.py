@@ -100,111 +100,53 @@ class DxfData():
         gen_txt = open(target_path, 'w')
 
         for line in self.lines:
-            gen_txt.write(str(line.atr) + '\n')
-            gen_txt.write(str(truncate(line.start.x, 2)) + '\t')
-            gen_txt.write(str(truncate(line.start.y, 2)) + '\t')
-            gen_txt.write(str(truncate(line.end.x, 2)) + '\t')
-            gen_txt.write(str(truncate(line.end.y, 2)) + '\n')
+            gen_txt.writelines(f'''{line.atr}
+{line.start.x:.3} {line.start.y:.3}
+{line.end.x:.3} {line.end.y:.3}\n''')
 
         for arc in self.arcs:
-            gen_txt.write(str(arc.atr) + '\n')
-            gen_txt.write(str(truncate(arc.center.x, 2)) + '\t')
-            gen_txt.write(str(truncate(arc.center.y, 2)) + '\t')
-            gen_txt.write(str(truncate(arc.rad, 2)) + '\n')
+            gen_txt.writelines(f'''{arc.atr}
+{arc.center.x:.3} {arc.center.y:.3} {arc.rad:.3}\n''')
 
         for circle in self.circles:
-            gen_txt.write(str(circle.atr) + '\n')
-            gen_txt.write(str(truncate(circle.center.x, 2)) + '\t')
-            gen_txt.write(str(truncate(circle.center.y, 2)) + '\t')
-            gen_txt.write(str(truncate(circle.rad, 2)) + '\n')
+            gen_txt.writelines(f'''{circle.atr}
+{circle.center.x:.3} {circle.center.y:.3} {circle.rad:.3}\n''')
 
         for poly in self.polylines:
             gen_txt.write(str(poly.atr) + '\n')
             for lwpoint in poly.lwpoints:
                 for coord in range(2):
-                    gen_txt.write(str(truncate(lwpoint[coord], 2)) + '\t')
+                    gen_txt.write(f'{lwpoint[coord]:.3} ')
             gen_txt.write('\n')
         gen_txt.close()
 
     def print_prims_into_txt(self, target_path):
-        self.txtPath = target_path
-
-        gen_txt = open(self.txtPath, 'w')
-        self.prev_point = []
-        self.next_point = []
+        gen_txt = open(target_path, 'w')
 
         for line in self.lines:
-            if not self.prev_point:
-                self.prev_point = [truncate(line.start.x, 2),
-                                   truncate(line.start.y, 2),
-                                   0]
-
-            if self.prev_point != self.next_point:
-                gen_txt.write('\t'.join(str(i) for i in self.prev_point))
-                gen_txt.write('\n')
-
-            self.next_point = [truncate(line.end.x, 2),
-                               truncate(line.end.y, 2),
-                               0]
-            gen_txt.write('\t'.join(str(i) for i in self.next_point))
-            gen_txt.write('\n')
+            gen_txt.writelines(f'''{line.start.x:.3} {line.start.y:.3} 0
+{line.end.x:.3} {line.end.y:.3} 0\n''')
 
         for arc in self.arcs:
-            if not self.prev_point:
-                self.prev_point = [truncate(arc.start_point.x, 2),
-                                  truncate(arc.start_point.y, 2),
-                                  0]
-
-            if self.prev_point != self.next_point:
-                gen_txt.write('\t'.join(str(i) for i in self.prev_point))
-                gen_txt.write('\n')
-
-            self.next_point = [truncate(arc.end_point.x, 2),
-                              truncate(arc.end_point.y, 2),
-                              truncate(arc.rad, 2)]
-            gen_txt.write('\t'.join(str(i) for i in self.next_point))
-            gen_txt.write('\n')
+            gen_txt.writelines(f'''{arc.start_point.x:.3} {arc.start_point.y:.3} 0
+{arc.end_point.x:.3} {arc.end_point.y:.3} {arc.rad:.3}\n''')
 
         for circle in self.circles:
-            if not self.prev_point:
-                self.prev_point = [truncate(circle.center.x, 2) + truncate(circle.rad, 2),
-                                   truncate(circle.center.y, 2),
-                                   0]
-
-            if self.prev_point != self.next_point:
-                gen_txt.write('\t'.join(str(i) for i in self.prev_point))
-                gen_txt.write('\n')
-
-            self.next_point = [self.prev_point[0],
-                               self.prev_point[1],
-                               truncate(circle.rad, 2)]
-            gen_txt.write('\t'.join(str(i) for i in self.next_point))
-            gen_txt.write('\n')
+            #1st half(arc) of a circle
+            gen_txt.writelines(f'''{(circle.center.x + circle.rad):.3} {circle.center.y:.3} 0
+{(circle.center.x - circle.rad):.3} {circle.center.y:.3} {circle.rad:.3}\n''')
+            # 2nd half(arc) of a circle
+            gen_txt.writelines(f'''{(circle.center.x - circle.rad):.3} {circle.center.y:.3} 0
+{(circle.center.x + circle.rad):.3} {circle.center.y:.3} {circle.rad:.3}\n''')
 
         for poly in self.polylines:
+            pPoint = None
             for lwpoint in poly.lwpoints:
-                if not self.prev_point:
-                    self.prev_point = (truncate(lwpoint[0], 2),
-                                       truncate(lwpoint[1], 2),
-                                       0)
-
-                if self.prev_point != self.next_point:
-                    gen_txt.write('\t'.join(str(i) for i in self.prev_point))
-                    gen_txt.write('\n')
-
-                if lwpoint[4] == 0:
-                    self.next_point = (truncate(lwpoint[0], 2),
-                                       truncate(lwpoint[1], 2),
-                                       0)
-
-                elif lwpoint[4] != 0:
-                    polyarc_rad = abs(lwpoint[4] + 1/lwpoint[4]) * math.sqrt((lwpoint[0] - self.prev_point[0]) ** 2 + (lwpoint[1] - self.prev_point[1]) ** 2) / 4
-                    self.next_point = (truncate(lwpoint[0], 2),
-                                       truncate(lwpoint[1], 2),
-                                       truncate(polyarc_rad, 2))
-                gen_txt.write('\t'.join(str(i) for i in self.next_point))
-                gen_txt.write('\n')
-
+                if pPoint is not None:
+                    rad = 0 if pPoint[4] == 0 else (abs(pPoint[4] + 1 / pPoint[4]) * math.sqrt((lwpoint[0] - pPoint[0]) ** 2 + (lwpoint[1] - pPoint[1]) ** 2) / 4)
+                    gen_txt.writelines(f'''{pPoint[0]:.3f} {pPoint[1]:.3f} 0
+{lwpoint[0]:.3f} {lwpoint[1]:.3f} {rad:.3f}\n''')
+                pPoint = lwpoint
         gen_txt.close()
 
     def define_dimes(self): #defines dimensions (profile) of a figure
