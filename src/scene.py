@@ -14,6 +14,34 @@ class Sketch():
         axes.grid()
         axes.set_axisbelow(True)
 
+    def polyarc_center(self, current, next, rad):
+        #https://www.afralisp.net/archive/lisp/Bulges1.htm
+        x = (current[0] + next[0]) / 2
+        y = (current[1] + next[1]) / 2
+        # if not an arc or a halfcircle - the center is the center of the chord
+        if current[4] == (0 or 1 or (-1)):
+            cx, cy = x, y
+        else:
+            # d = math.sqrt((next[0] - current[0]) ** 2 + (next[0] - current[0]) ** 2)  # It's a chord. A distance between start- and endpoint of a polyarc
+            d = math.hypot(next[0] - current[0], next[1] - current[1])
+            q = math.sqrt((rad ** 2) - (d / 2) ** 2)  # Apothem. This line starts at the center and is perpendicular to the chord
+            a = math.atan(abs(current[4])) * 4  # Included arc angle (theta)
+            if current[4] > 0:
+                if a > math.pi:
+                    cx = x - q * (current[1] - next[1]) / d
+                    cy = y - q * (next[0] - current[0]) / d
+                else:
+                    cx = x + q * (current[1] - next[1]) / d
+                    cy = y + q * (next[0] - current[0]) / d
+            else:
+                if a > math.pi:
+                    cx = x + q * (current[1] - next[1]) / d
+                    cy = y + q * (next[0] - current[0]) / d
+                else:
+                    cx = x - q * (current[1] - next[1]) / d
+                    cy = y - q * (next[0] - current[0]) / d
+        return cx, cy
+
     def draw_lines(self, axes):
         from matplotlib.lines import Line2D
         from matplotlib.patches import Arc, Polygon, Circle
@@ -37,27 +65,9 @@ class Sketch():
 
                 else:
                     polyarc_rad = abs(current[4] + 1 / current[4]) * math.sqrt((next[0] - current[0]) ** 2 + (next[1] - current[1]) ** 2) / 4
-                    # polyarc_center = [(((1+current[4])**2)*current[0]/(4*current[4]) - ((1-current[4])**2)*next[0]/(4*current[4])),
-                    #                   (((1+current[4])**2)*current[1]/(4*current[4]) - ((1-current[4])**2)*next[1]/(4*current[4]))]
-
-                    # cx = (0.25/current[4])*(((1+current[4])**2)*current[0] - ((1-current[4])**2)*next[0])
-                    # cy = (0.25/current[4])*(((1+current[4])**2)*current[1] - ((1-current[4])**2)*next[1])
-
-                    # cx = (((1+current[4]) ** 2) * current[0] - ((1-current[4]) ** 2) * next[0]) / (4 * current[4])
-                    # cy = (((1+current[4]) ** 2) * current[1] - ((1-current[4]) ** 2) * next[1]) / (4 * current[4])
-
-
-                    cx = current[0] - polyarc_rad * math.cos(4 * math.atan(current[4]))
-                    cy = current[1] - polyarc_rad * math.sin(4 * math.atan(current[4]))
-                    # bulge = current[4]
-                    # print(bulge)
-
-                    start_angle = (4 * math.atan2(current[0], current[1])) * 180 / math.pi
-                    end_angle = (4 * math.atan2(next[0], next[1])) * 180 / math.pi
-                    # if current[4] <= 0:
-                    #     temp = start_angle
-                    #     start_angle = end_angle
-                    #     end_angle = temp
+                    cx, cy = self.polyarc_center(current, next, polyarc_rad)
+                    start_angle = (4 * math.atan2(current[1], current[0])) * 180 / math.pi
+                    end_angle = (4 * math.atan2(next[1], next[0])) * 180 / math.pi
                     axes.add_patch(Arc((cx, cy),
                                        width=2 * polyarc_rad,
                                        height=2 * polyarc_rad,
