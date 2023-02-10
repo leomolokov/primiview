@@ -6,7 +6,7 @@
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:ev="http://www.w3.org/2001/xml-events">
 
-	<g transform="scale=(1,-1)">
+	<g transform="scale(1,-1)">
 
 		<path d="M 160.0,1.3512323399573678e-14 A5.0,5.0
 		0 0,1 170.0,1.29e-14"

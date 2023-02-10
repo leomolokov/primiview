@@ -120,6 +120,10 @@ class DxfData():
             gen_txt.write('\n')
         gen_txt.close()
 
+    def polyarc_rad(self, current, next):
+        rad = 0 if current[4] == 0 else (abs(current[4] + 1 / current[4]) * math.sqrt((next[0] - current[0]) ** 2 + (next[1] - current[1]) ** 2) / 4)
+        return rad
+
     def print_prims_into_txt(self, target_path):
         gen_txt = open(target_path, 'w')
 
@@ -143,7 +147,8 @@ class DxfData():
             pPoint = None
             for lwpoint in poly.lwpoints:
                 if pPoint is not None:
-                    rad = 0 if pPoint[4] == 0 else (abs(pPoint[4] + 1 / pPoint[4]) * math.sqrt((lwpoint[0] - pPoint[0]) ** 2 + (lwpoint[1] - pPoint[1]) ** 2) / 4)
+                    rad = self.polyarc_rad(pPoint, lwpoint)
+                    # rad = 0 if pPoint[4] == 0 else (abs(pPoint[4] + 1 / pPoint[4]) * math.sqrt((lwpoint[0] - pPoint[0]) ** 2 + (lwpoint[1] - pPoint[1]) ** 2) / 4)
                     gen_txt.writelines(f'''{pPoint[0]:.3f} {pPoint[1]:.3f} 0
 {lwpoint[0]:.3f} {lwpoint[1]:.3f} {rad:.3f}\n''')
                 pPoint = lwpoint
@@ -256,71 +261,3 @@ class DxfData():
         f.write('\t</g>\n')
         f.write('</svg>')
         f.close()
-
-
-
-
-    # def saveas_svg(self, target_path):
-    #     import svgwrite
-    #     import math
-    #
-    #     dwg = svgwrite.Drawing(target_path, profile='tiny')
-    #
-    #     def add_arc(svg, position, radius, rotation, start, end, color='white'):
-    #         x0, y0 = position[0] + radius, position[1]
-    #         x1, y1 = position[0] + radius, position[1]
-    #         rad_start = math.radians(start % 360)
-    #         rad_end = math.radians(end % 360)
-    #         x0 -= (1 - math.cos(rad_start)) * radius
-    #         y0 += math.sin(rad_start) * radius
-    #         x1 -= (1 - math.cos(rad_end)) * radius
-    #         y1 += math.sin(rad_end) * radius
-    #
-    #         args = {'x0': x0,
-    #                 'y0': y0,
-    #                 'x1': x1,
-    #                 'y1': y1,
-    #                 'xradius': radius,
-    #                 'yradius': radius,
-    #                 'ellipseRotation': 0,
-    #                 'swap': 1 if end > start else 0,
-    #                 'large': 1 if abs(start - end) > 180 else 0,
-    #                 }
-    #
-    #         # 'a/A' params: (rx,ry x-axis-rotation large-arc-flag,sweep-flag x,y)+ (case dictates relative/absolute pos)
-    #         path = """M %(x0)f,%(y0)f
-    #                       A %(xradius)f,%(yradius)f %(ellipseRotation)f %(large)d,%(swap)d %(x1)f,%(y1)f
-    #             """ % args
-    #         arc = svg.path(d=path,
-    #                        stroke='red',
-    #                        fill='none')
-    #         arc.rotate(rotation, position)
-    #         svg.add(arc)
-    #
-    #     #https://svgwrite.readthedocs.io/en/latest/classes/drawing.html
-    #     for line in self.lines:
-    #         dwg.add(dwg.line(start=line.start[:2],
-    #                          end=line.end[:2],
-    #                          stroke=svgwrite.rgb(100, 0, 6, '%')))
-    #
-    #     #https://stackoverflow.com/questions/25019441/arc-pie-cut-in-svgwrite
-    #     for arc in self.arcs:
-    #         # addArc(dwg, current_group, p0=arc.start_point[:2], p1=arc.end_point[:2], radius=arc.rad)
-    #         add_arc(dwg, arc.center[:2], arc.rad, 0, arc.start_angle, arc.end_angle, color='red')
-    #
-    #     for circle in self.circles:
-    #         dwg.add(dwg.circle(center=circle.center[:2],
-    #                            r=circle.rad,
-    #                            stroke=svgwrite.rgb(100, 0, 6, '%'),
-    #                            fill='none'))
-    #
-    #     for poly in self.polylines:
-    #         # dwg.add(dwg.polyline(points=poly.lwpoints))
-    #         self.polys = []
-    #         for lwpoint in poly.lwpoints:
-    #             self.polys.append(lwpoint[:2])
-    #         dwg.add(dwg.polyline(points=self.polys,
-    #                              stroke=svgwrite.rgb(100, 0, 6, '%'),
-    #                              fill='none'))
-    #
-    #     dwg.save()
