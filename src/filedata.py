@@ -53,6 +53,7 @@ class Poly():
     def __init__(self, file):
         self.atr = file
         self.lwpoints = file.lwpoints
+        self.closed_flag = file.closed
 
     def __str__(self):
         return f'{self.atr}'
