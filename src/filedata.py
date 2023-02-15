@@ -118,6 +118,7 @@ class DxfData():
             for lwpoint in poly.lwpoints:
                 for coord in range(2):
                     gen_txt.write(f'{lwpoint[coord]:.3} ')
+
             gen_txt.write('\n')
         gen_txt.close()
 
@@ -153,6 +154,12 @@ class DxfData():
                     gen_txt.writelines(f'''{pPoint[0]:.3f} {pPoint[1]:.3f} 0
 {lwpoint[0]:.3f} {lwpoint[1]:.3f} {rad:.3f}\n''')
                 pPoint = lwpoint
+
+            if poly.closed_flag == 1:
+                rad = self.polyarc_rad(poly.lwpoints[-1], poly.lwpoints[0])
+                gen_txt.writelines(f'''{poly.lwpoints[-1][0]:.3f} {poly.lwpoints[-1][1]:.3f} 0
+{poly.lwpoints[0][0]:.3f} {poly.lwpoints[0][1]:.3f} {rad:.3f}\n''')
+
         gen_txt.close()
 
     def define_dimes(self): #defines dimensions (profile) of a figure
