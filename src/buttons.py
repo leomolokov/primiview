@@ -6,6 +6,7 @@ class Buttons():
         self.savelikedxfButton.clicked.connect(self.savelike_dxf)
         self.cncsaveButton.clicked.connect(self.savelike_prims)
         self.svgsaveButton.clicked.connect(self.savelike_svg)
+        self.jsonsaveButton.clicked.connect(self.savelike_json)
 
     def openandshow_dxf(self):
         from filedata import DxfData
@@ -29,3 +30,6 @@ class Buttons():
 
     def savelike_svg(self):
         self.dxf_data.saveas_svg(self.set_save_dir('svg'))
+
+    def savelike_json(self):
+        self.dxf_data.saveas_json(self.set_save_dir('json'))

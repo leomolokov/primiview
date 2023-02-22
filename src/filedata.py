@@ -150,7 +150,6 @@ class DxfData():
             for lwpoint in poly.lwpoints:
                 if pPoint is not None:
                     rad = self.polyarc_rad(pPoint, lwpoint)
-                    # rad = 0 if pPoint[4] == 0 else (abs(pPoint[4] + 1 / pPoint[4]) * math.sqrt((lwpoint[0] - pPoint[0]) ** 2 + (lwpoint[1] - pPoint[1]) ** 2) / 4)
                     gen_txt.writelines(f'''{pPoint[0]:.3f} {pPoint[1]:.3f} 0
 {lwpoint[0]:.3f} {lwpoint[1]:.3f} {rad:.3f}\n''')
                 pPoint = lwpoint
@@ -269,3 +268,51 @@ class DxfData():
         f.write('\t</g>\n')
         f.write('</svg>')
         f.close()
+
+    def saveas_json(self, target_path):
+        import json
+        path = []
+
+        for line in self.lines:
+            linepath = []
+            linepath.append([line.start.x, line.start.y, 0])
+            linepath.append([line.end.x, line.end.y, 0])
+            path.append(linepath)
+
+        for arc in self.arcs:
+            arcpath = []
+            arcpath.append([arc.start_point.x, arc.start_point.y, math.tan((arc.end_angle - arc.start_angle) / 4)])
+            arcpath.append([arc.end_point.x, arc.end_point.y, 0])
+            path.append(arcpath)
+
+        for circle in self.circles:
+            circlepath = []
+            # 1st half(arc) of a circle
+            circlepath.append([circle.center.x + circle.rad, circle.center.y, 1])
+            circlepath.append([circle.center.x - circle.rad, circle.center.y, 0])
+            # 2nd half(arc) of a circle
+            circlepath.append([circle.center.x - circle.rad, circle.center.y, 1])
+            circlepath.append([circle.center.x + circle.rad, circle.center.y, 0])
+            path.append(circlepath)
+
+        for poly in self.polylines:
+            polypath = []
+            pPoint = None
+            for lwpoint in poly.lwpoints:
+                if pPoint is not None:
+                    polypath.append(pPoint[0], pPoint[1], pPoint[4])
+                    polypath.append(lwpoint[0], lwpoint[1], 0)
+                pPoint = lwpoint
+
+            if poly.closed_flag == 1:
+                polypath.append(poly.lwpoints[-1][0], poly.lwpoints[-1][1], 0)
+                polypath.append(poly.lwpoints[0][0], poly.lwpoints[0][1], 0)
+            path.append(polypath)
+
+        with open(f'{target_path}.json', mode='w') as json_file:
+            data = {
+                'part_id': 'dummy',
+                'paths': path
+            }
+            # json.dump(data, json_file, indent='')
+            json.dump(data, json_file)
