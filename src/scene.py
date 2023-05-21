@@ -94,6 +94,8 @@ class Sketch():
                     center, polyarc_rad = self.polyarc_center_rad(current, next)
                     start_angle = self.angle_vectors(current, center)
                     end_angle = self.angle_vectors(next, center)
+                    if current[4] < 0:
+                        start_angle, end_angle = end_angle, start_angle
                     axes.add_patch(Arc((center[0], center[1]),
                                        width=2 * polyarc_rad,
                                        height=2 * polyarc_rad,

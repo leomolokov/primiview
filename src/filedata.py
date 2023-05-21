@@ -130,34 +130,34 @@ class DxfData():
         gen_txt = open(target_path, 'w')
 
         for line in self.lines:
-            gen_txt.writelines(f'''{line.start.x:.3} {line.start.y:.3} 0
-{line.end.x:.3} {line.end.y:.3} 0\n''')
+            gen_txt.writelines(f'''{line.start.x:.2f} {line.start.y:.2f} 0
+{line.end.x:.2f} {line.end.y:.2f} 0\n''')
 
         for arc in self.arcs:
-            gen_txt.writelines(f'''{arc.start_point.x:.3} {arc.start_point.y:.3} 0
-{arc.end_point.x:.3} {arc.end_point.y:.3} {arc.rad:.3}\n''')
+            gen_txt.writelines(f'''{arc.start_point.x:.2f} {arc.start_point.y:.2f} 0
+{arc.end_point.x:.2f} {arc.end_point.y:.2f} {arc.rad:.2f}\n''')
 
         for circle in self.circles:
             #1st half(arc) of a circle
-            gen_txt.writelines(f'''{(circle.center.x + circle.rad):.3} {circle.center.y:.3} 0
-{(circle.center.x - circle.rad):.3} {circle.center.y:.3} {circle.rad:.3}\n''')
+            gen_txt.writelines(f'''{(circle.center.x + circle.rad):.2f} {circle.center.y:.2f} 0
+{(circle.center.x - circle.rad):.2f} {circle.center.y:.2f} {circle.rad:.2f}\n''')
             # 2nd half(arc) of a circle
-            gen_txt.writelines(f'''{(circle.center.x - circle.rad):.3} {circle.center.y:.3} 0
-{(circle.center.x + circle.rad):.3} {circle.center.y:.3} {circle.rad:.3}\n''')
+            gen_txt.writelines(f'''{(circle.center.x - circle.rad):.2f} {circle.center.y:.2f} 0
+{(circle.center.x + circle.rad):.2f} {circle.center.y:.2f} {circle.rad:.2f}\n''')
 
         for poly in self.polylines:
             pPoint = None
             for lwpoint in poly.lwpoints:
                 if pPoint is not None:
                     rad = self.polyarc_rad(pPoint, lwpoint)
-                    gen_txt.writelines(f'''{pPoint[0]:.3f} {pPoint[1]:.3f} 0
-{lwpoint[0]:.3f} {lwpoint[1]:.3f} {rad:.3f}\n''')
+                    gen_txt.writelines(f'''{pPoint[0]:.2f} {pPoint[1]:.2f} 0
+{lwpoint[0]:.2f} {lwpoint[1]:.2f} {rad:.2f}\n''')
                 pPoint = lwpoint
 
             if poly.closed_flag == 1:
                 rad = self.polyarc_rad(poly.lwpoints[-1], poly.lwpoints[0])
-                gen_txt.writelines(f'''{poly.lwpoints[-1][0]:.3f} {poly.lwpoints[-1][1]:.3f} 0
-{poly.lwpoints[0][0]:.3f} {poly.lwpoints[0][1]:.3f} {rad:.3f}\n''')
+                gen_txt.writelines(f'''{poly.lwpoints[-1][0]:.2f} {poly.lwpoints[-1][1]:.2f} 0
+{poly.lwpoints[0][0]:.2f} {poly.lwpoints[0][1]:.2f} {rad:.2f}\n''')
 
         gen_txt.close()
 
@@ -300,19 +300,27 @@ class DxfData():
             pPoint = None
             for lwpoint in poly.lwpoints:
                 if pPoint is not None:
-                    polypath.append(pPoint[0], pPoint[1], pPoint[4])
-                    polypath.append(lwpoint[0], lwpoint[1], 0)
+                    polypath.append(pPoint[0])
+                    polypath.append(pPoint[1])
+                    polypath.append(pPoint[4])
+                    polypath.append(lwpoint[0])
+                    polypath.append(lwpoint[1])
+                    polypath.append(0)
                 pPoint = lwpoint
 
             if poly.closed_flag == 1:
-                polypath.append(poly.lwpoints[-1][0], poly.lwpoints[-1][1], 0)
-                polypath.append(poly.lwpoints[0][0], poly.lwpoints[0][1], 0)
+                polypath.append(poly.lwpoints[-1][0])
+                polypath.append(poly.lwpoints[-1][1])
+                polypath.append(0)
+                polypath.append(poly.lwpoints[0][0])
+                polypath.append(poly.lwpoints[0][1])
+                polypath.append(0)
             path.append(polypath)
 
-        with open(f'{target_path}.json', mode='w') as json_file:
-            data = {
+        with open(f'{target_path}', mode='w') as json_file:
+            data = [{
                 'part_id': 'dummy',
                 'paths': path
-            }
-            # json.dump(data, json_file, indent='')
-            json.dump(data, json_file)
+            }]
+            json.dump(data, json_file, indent=2)
+            # json.dump(data, json_file)
