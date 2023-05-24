@@ -7,7 +7,7 @@ import math
 
 class Line():
     def __init__(self, file):
-        self.coords = []
+        #self.coords = []
         self.atr = file
         self.start = vec3(file.dxf.start.x,
                           file.dxf.start.y,
@@ -102,22 +102,22 @@ class DxfData():
 
         for line in self.lines:
             gen_txt.writelines(f'''{line.atr}
-{line.start.x:.3} {line.start.y:.3}
-{line.end.x:.3} {line.end.y:.3}\n''')
+{line.start.x:.2f} {line.start.y:.2f}
+{line.end.x:.2f} {line.end.y:.2f}\n''')
 
         for arc in self.arcs:
             gen_txt.writelines(f'''{arc.atr}
-{arc.center.x:.3} {arc.center.y:.3} {arc.rad:.3}\n''')
+{arc.center.x:.2f} {arc.center.y:.2f} {arc.rad:.2f}\n''')
 
         for circle in self.circles:
             gen_txt.writelines(f'''{circle.atr}
-{circle.center.x:.3} {circle.center.y:.3} {circle.rad:.3}\n''')
+{circle.center.x:.2f} {circle.center.y:.2f} {circle.rad:.2f}\n''')
 
         for poly in self.polylines:
             gen_txt.write(str(poly.atr) + '\n')
             for lwpoint in poly.lwpoints:
                 for coord in range(2):
-                    gen_txt.write(f'{lwpoint[coord]:.3} ')
+                    gen_txt.write(f'{lwpoint[coord]:.2f} ')
 
             gen_txt.write('\n')
         gen_txt.close()
