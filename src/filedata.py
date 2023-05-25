@@ -313,25 +313,11 @@ class DxfData():
             pPoint = None
             for lwpoint in poly.lwpoints:
                 if pPoint is not None:
-                    # polypath.append(pPoint[0]),
-                    # polypath.append(pPoint[1]),
-                    # polypath.append(pPoint[4])
-                    # polypath.append(lwpoint[0]),
-                    # polypath.append(lwpoint[1]),
-                    # polypath.append(0)
-
                     polypath.append([pPoint[0], pPoint[1], pPoint[4]])
                     polypath.append([lwpoint[0], lwpoint[1], 0])
                 pPoint = lwpoint
 
             if poly.closed_flag == 1:
-                # polypath.append(poly.lwpoints[-1][0])
-                # polypath.append(poly.lwpoints[-1][1])
-                # polypath.append(0)
-                # polypath.append(poly.lwpoints[0][0])
-                # polypath.append(poly.lwpoints[0][1])
-                # polypath.append(0)
-
                 polypath.append([poly.lwpoints[-1][0], poly.lwpoints[-1][1], poly.lwpoints[-1][4]])
                 polypath.append([poly.lwpoints[0][0], poly.lwpoints[0][1], 0])
             path.append(polypath)
