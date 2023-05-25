@@ -118,6 +118,8 @@ class DxfData():
             for lwpoint in poly.lwpoints:
                 for coord in range(2):
                     gen_txt.write(f'{lwpoint[coord]:.2f} ')
+            if poly.closed_flag == 1:
+                gen_txt.write(f'''{poly.lwpoints[0][0]:.2f} {poly.lwpoints[0][1]:.2f}\n''')
 
             gen_txt.write('\n')
         gen_txt.close()
@@ -227,6 +229,7 @@ class DxfData():
     def saveas_svg(self, target_path):
         minx, miny = self.define_extremums()
         width, height = self.define_dimes()
+        #linewidth = 1
         f = open(f'{target_path}', mode='w', encoding='utf-8')
         f.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
         f.writelines(['<svg version="1.1" width="100%" height="100%"\n',
@@ -238,7 +241,7 @@ class DxfData():
         f.write(f'\t<g transform="scale(1,-1)">\n\n')
 
         for line in self.lines:
-            f.write(f'\t\t<line x1="{line.start.x}" y1="{line.start.y}" x2="{line.end.x}" y2="{line.end.y}" stroke="red" stroke-width="2"/>\n\n')
+            f.write(f'\t\t<line x1="{line.start.x}" y1="{line.start.y}" x2="{line.end.x}" y2="{line.end.y}" stroke="red" stroke-width="0.1"/>\n\n')
 
         for arc in self.arcs:
             #https://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle
@@ -249,20 +252,22 @@ class DxfData():
                 large_arc_flag = 1 #arc is large
             f.writelines([f'\t\t<path d="M {arc.start_point.x},{arc.start_point.y} A{arc.rad},{arc.rad}\n',
                           f'\t\t0 {large_arc_flag},{sweep_flag} {arc.end_point.x},{arc.end_point.y}"\n',
-                          f'\t\tfill="none" stroke="red" stroke-width="2"/>\n\n'])
+                          f'\t\tfill="none" stroke="red" stroke-width="0.1"/>\n\n'])
 
         for circle in self.circles:
-            f.write(f'\t\t<circle cx="{circle.center.x}" cy="{circle.center.y}" r="{circle.rad}" fill="none" stroke="red" stroke-width="2"/>\n\n')
+            f.write(f'\t\t<circle cx="{circle.center.x}" cy="{circle.center.y}" r="{circle.rad}" fill="none" stroke="red" stroke-width="0.1"/>\n\n')
 
         if self.polylines:
             points = []
         for poly in self.polylines:
             for lwpoint in poly.lwpoints:
                 points.append(lwpoint[:2])
-            f.writelines([f'\t\t<polyline fill="none" stroke="red" stroke-width="10"\n',
+            f.writelines([f'\t\t<polyline fill="none" stroke="red" stroke-width="0.1"\n',
                          f'\t\tpoints="'])
             for point in points:
                 f.write(f'{point[0]}, {point[1]} ')
+            if poly.closed_flag == 1:
+                f.write(f'{points[0][0]}, {points[0][1]} ')
             f.write('"/>\n')
 
         f.write('\t</g>\n')
@@ -281,7 +286,15 @@ class DxfData():
 
         for arc in self.arcs:
             arcpath = []
-            arcpath.append([arc.start_point.x, arc.start_point.y, math.tan((arc.end_angle - arc.start_angle) / 4)])
+            #bulge = math.tan((arc.start_angle - arc.end_angle) / 4) if arc.start_angle > arc.end_angle else math.tan((arc.start_angle + (360 - arc.end_angle)) / 4)
+            angle = (arc.end_angle - arc.start_angle) % 360
+            if angle == 180:
+                bulge = -1 if arc.start_angle > arc.end_angle else 1
+            elif angle == 90:
+                bulge = -(math.sqrt(2) - 1) if arc.start_angle > arc.end_angle else (math.sqrt(2) - 1)
+            else:
+                bulge = math.tan((angle*math.pi/180) / 4)
+            arcpath.append([arc.start_point.x, arc.start_point.y, bulge])
             arcpath.append([arc.end_point.x, arc.end_point.y, 0])
             path.append(arcpath)
 
