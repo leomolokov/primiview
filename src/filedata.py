@@ -286,14 +286,8 @@ class DxfData():
 
         for arc in self.arcs:
             arcpath = []
-            #bulge = math.tan((arc.start_angle - arc.end_angle) / 4) if arc.start_angle > arc.end_angle else math.tan((arc.start_angle + (360 - arc.end_angle)) / 4)
             angle = (arc.end_angle - arc.start_angle) % 360
-            if angle == 180:
-                bulge = -1 if arc.start_angle > arc.end_angle else 1
-            elif angle == 90:
-                bulge = -(math.sqrt(2) - 1) if arc.start_angle > arc.end_angle else (math.sqrt(2) - 1)
-            else:
-                bulge = math.tan((angle*math.pi/180) / 4)
+            bulge = math.tan((angle*math.pi/180) / 4)
             arcpath.append([arc.start_point.x, arc.start_point.y, bulge])
             arcpath.append([arc.end_point.x, arc.end_point.y, 0])
             path.append(arcpath)
